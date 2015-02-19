@@ -35,7 +35,7 @@ class SmartCameraModule(mp_module.MPModule):
             
             # Sony QX1
             if camera_type == 2:
-                new_camera = SmartCamera_SonyQX(i,"eth1")
+                new_camera = SmartCamera_SonyQX(i,"wlan0")
                 if new_camera.boValidCameraFound() is True:
                     self.camera_list = self.camera_list + [new_camera]
                     print("Found QX Camera")
