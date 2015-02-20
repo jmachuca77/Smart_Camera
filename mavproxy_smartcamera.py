@@ -45,6 +45,7 @@ class SmartCameraModule(mp_module.MPModule):
     
     def cmd_camtrigger(self, CAMERA_FEEDBACK):
         '''Trigger Camera'''
+        print(self.camera_list)
         for cam in self.camera_list:
             cam.take_picture()
             print("Trigger Cam %s" % cam)
