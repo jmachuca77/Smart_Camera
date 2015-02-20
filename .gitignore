@@ -1,0 +1,12 @@
+
+*.pbxproj
+
+*.xcworkspacedata
+
+*.xccheckout
+
+*.xcuserstate
+
+*.xcscheme
+
+Smart_Camera/Smart_Camera.xcodeproj/xcuserdata/Jaime.xcuserdatad/xcschemes/xcschememanagement.plist
