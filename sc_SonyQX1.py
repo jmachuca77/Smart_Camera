@@ -40,6 +40,10 @@ import ssdp
 # Public Methods   : boGetLatestImage
 #                    u32GetImageCounter
 #                    boTakePicture
+#                    boSetExposureMode
+#                    boSetShutterSpeed
+#                    boSetAperture
+#                    boSetISO
 #
 # Private Methods  : __sFindInterfaceIPAddress
 #                    __sFindCameraURL
@@ -284,6 +288,121 @@ class SmartCamera_SonyQX():
 
     def u32GetImageCounter(self):
         return self.u32ImgCounter
+    
+#****************************************************************************
+#   Method Name     : boSetExposureMode
+#
+#   Description     : Commands the camera to set a specific ShootingMode
+#
+#   Parameters      : Exposure Mode String
+#                     Program Auto, Aperture, Shutter, Manual, Intelligent Auto, Superior Auto
+#
+#   Return Value    : True if succesful
+#                     False if Error Recieved
+#
+#   Autor           : Jaime Machuca
+#
+#****************************************************************************
+
+    def boSetExposureMode(self,sExposureMode):
+        # Send command to set Exposure Mode
+        sResponse = self.__sSimpleCall("setExposureMode", params=[sExposureMode]))
+        
+        # Check response for a succesful result
+        if 'result' in sResponse:
+            return True
+
+        # In case of an error, return false
+        return False
+
+#****************************************************************************
+#   Method Name     : boSetShutterSpeed
+#
+#   Description     : Commands the camera to set the Shutter Speed
+#
+#   Parameters      : Integer with the shutter speed divisor
+#                     i.e. 1/1000 = 1000
+#                     NOTE: This will only work for shutter speeds smaller than 1 sec
+#
+#   Return Value    : True if succesful
+#                     False if Error Recieved
+#
+#   Autor           : Jaime Machuca
+#
+#****************************************************************************
+
+    def boSetShutterSpeed(self,u16ShutterSpeed):
+        # Create Shutter Speed String
+        sShutterSpeed = "1/%s" % str(u16ShutterSpeed)
+        
+        # Send command to set Exposure Mode
+        sResponse = self.__sSimpleCall("setShutterSpeed", params=[sShutterSpeed]))
+            
+        # Check response for a succesful result
+        if 'result' in sResponse:
+            return True
+    
+        # In case of an error, return false
+        return False
+
+#****************************************************************************
+#   Method Name     : boSetAperture
+#
+#   Description     : Commands the camera to set a lens Apperture
+#
+#   Parameters      : F number * 10
+#                     i.e. F 2.8 = 28
+#
+#   Return Value    : True if succesful
+#                     False if Error Recieved
+#
+#   Autor           : Jaime Machuca
+#
+#****************************************************************************
+
+    def boSetAperture(self,u8Aperture):
+        # Create Aperture String (cast one of the numbers to float to get a float)
+        fFvalue = u8Aperture / float(10)
+        sFValue = str(fFvalue)
+
+        # Send command to set Exposure Mode
+        sResponse = self.__sSimpleCall("setFNumber", params=[sFValue]))
+            
+        # Check response for a succesful result
+        if 'result' in sResponse:
+            return True
+            
+        # In case of an error, return false
+        return False
+
+#****************************************************************************
+#   Method Name     : boSetISO
+#
+#   Description     : Commands the camera to set an ISO number
+#
+#   Parameters      : ISO Value
+#                     80, 100, 1000, 3200, etc...
+#
+#   Return Value    : True if succesful
+#                     False if Error Recieved
+#
+#   Autor           : Jaime Machuca
+#
+#****************************************************************************
+
+    def boSetISO(self,u16ISO):
+        # Create ISO String
+        sISO = str(u16ISO)
+        
+        # Send command to set Exposure Mode
+        sResponse = self.__sSimpleCall("setIsoSpeedRate", params=[sISO]))
+            
+        # Check response for a succesful result
+        if 'result' in sResponse:
+            return True
+        
+        # In case of an error, return false
+        return False
 
 #****************************************************************************
 #   Method Name     : boTakePicture
