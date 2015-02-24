@@ -1,25 +1,89 @@
 #!/usr/bin/env python
-'''SmartCamera commands'''
+#***************************************************************************
+#                      Copyright Droidika S.A. de C.V
+#***************************************************************************
+# Title        : mavproxy_smartcamera.py
+#
+# Description  : This file is intended to be added as a module to MAVProxy,
+#                it is intended to be used to control smart cameras that are
+#                connected to a companion computer. It reads MAVlink commands
+#                and uses them to control the cameras attached. The module
+#                reads a configuration file called smart_camera.cnf that tells
+#                it what cameras are connected, it then tries to connect to the
+#                cameras and populates a list of available cameras.
+#
+# Environment  : Python 2.7 Code. Intended to be included in MAVproxy as a Module
+#
+# Responsible  : Jaime Machuca
+#
+# License      : CC BY-NC-SA
+#
+# Editor Used  : Xcode 6.1.1 (6A2008a)
+#
+#****************************************************************************
 
+#****************************************************************************
+# HEADER-FILES (Only those that are needed in this file)
+#****************************************************************************
+
+# System Header files and Module Headers
 import time, math
-import sc_config
 
+# Module Dependent Headers
 from pymavlink import mavutil
-
-from sc_webcam import SmartCameraWebCam
-from sc_SonyQX1 import SmartCamera_SonyQX
-
 from MAVProxy.modules.lib import mp_module
 from MAVProxy.modules.lib.mp_settings import MPSetting
 
+
+# Own Headers
+from sc_webcam import SmartCameraWebCam
+from sc_SonyQX1 import SmartCamera_SonyQX
+import sc_config
+
+#****************************************************************************
+# Class name       : SmartCameraModule
+#
+# Public Methods   : init
+#                    mavlink_packet
+#
+# Private Methods  : __vRegisterCameras
+#                    __vCmdCamTrigger
+#
+#****************************************************************************
 class SmartCameraModule(mp_module.MPModule):
+
+#****************************************************************************
+#   Method Name     : __init__ Class Initializer
+#
+#   Description     : Initializes the class
+#
+#   Parameters      : mpstate
+#
+#   Return Value    : None
+#
+#   Autor           : Jaime Machuca
+#
+#****************************************************************************
+    
     def __init__(self, mpstate):
         super(SmartCameraModule, self).__init__(mpstate, "SmartCamera", "SmartCamera commands")
-        self.add_command('camtrigger', self.cmd_camtrigger, "Trigger camera")
-        self.register_cameras()
-    
-    # register cameras - creates camera objects based on camera-type configuration
-    def register_cameras(self):
+        self.add_command('camtrigger', self.__vCmdCamTrigger, "Trigger camera")
+        self.__vRegisterCameras()
+ 
+ #****************************************************************************
+ #   Method Name     : __vRegisterCameras
+ #
+ #   Description     : Creates camera objects based on camera-type configuration
+ #
+ #   Parameters      : None
+ #
+ #   Return Value    : None
+ #
+ #   Autor           : Jaime Machuca
+ #
+ #****************************************************************************
+
+    def __vRegisterCameras(self):
         
         # initialise list
         self.camera_list = []
@@ -42,8 +106,21 @@ class SmartCameraModule(mp_module.MPModule):
 
         # display number of cameras found
         print ("cameras found: %d" % len(self.camera_list))
-    
-    def cmd_camtrigger(self, CAMERA_FEEDBACK):
+
+#****************************************************************************
+#   Method Name     : __vCmdCamTrigger
+#
+#   Description     : Triggers all the cameras and stores Geotag information
+#
+#   Parameters      : None
+#
+#   Return Value    : None
+#
+#   Autor           : Jaime Machuca
+#
+#****************************************************************************
+
+    def __vCmdCamTrigger(self, CAMERA_FEEDBACK):
         '''Trigger Camera'''
         print(self.camera_list)
         for cam in self.camera_list:
@@ -53,6 +130,20 @@ class SmartCameraModule(mp_module.MPModule):
             print ("Longitude: %f" % CAMERA_FEEDBACK.lng)
             print ("Altitude: %f" % CAMERA_FEEDBACK.alt_msl)
 
+#****************************************************************************
+#   Method Name     : mavlink_packet
+#
+#   Description     : MAVProxy requiered callback function used to recieve MAVlink
+#                     packets
+#
+#   Parameters      : MAVLink Message
+#
+#   Return Value    : None
+#
+#   Autor           : Jaime Machuca
+#
+#****************************************************************************
+
     def mavlink_packet(self, m):
         '''handle a mavlink packet'''
         mtype = m.get_type()
@@ -60,8 +151,20 @@ class SmartCameraModule(mp_module.MPModule):
             print ("Got Message camera_status")
         if mtype == "CAMERA_FEEDBACK":
             print ("Got Message camera_feedback triggering Cameras")
-            self.cmd_camtrigger(m)
+            self.__vCmdCamTrigger(m)
 
+#****************************************************************************
+#   Method Name     : init
+#
+#   Description     :
+#
+#   Parameters      : mpstate
+#
+#   Return Value    : SmartCameraModule Instance
+#
+#   Autor           : Jaime Machuca
+#
+#****************************************************************************
 
 def init(mpstate):
     '''initialise module'''
