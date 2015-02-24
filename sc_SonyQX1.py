@@ -61,8 +61,7 @@ class SmartCamera_SonyQX():
 #                     snetInterface     String containing the Network Interface
 #                                       Name where we should look for the cam
 #
-#   Return Value    : Object instance if camera is found
-#                     None if no camera is found
+#   Return Value    : None
 #
 #   Autor           : Jaime Machuca, Randy Mackay
 #
