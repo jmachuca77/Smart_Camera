@@ -305,7 +305,7 @@ class SmartCamera_SonyQX():
 
     def boSetExposureMode(self,sExposureMode):
         # Send command to set Exposure Mode
-        sResponse = self.__sSimpleCall("setExposureMode", params=[sExposureMode]))
+        sResponse = self.__sSimpleCall("setExposureMode", params=[sExposureMode])
         
         # Check response for a succesful result
         if 'result' in sResponse:
@@ -335,7 +335,7 @@ class SmartCamera_SonyQX():
         sShutterSpeed = "1/%s" % str(u16ShutterSpeed)
         
         # Send command to set Exposure Mode
-        sResponse = self.__sSimpleCall("setShutterSpeed", params=[sShutterSpeed]))
+        sResponse = self.__sSimpleCall("setShutterSpeed", params=[sShutterSpeed])
             
         # Check response for a succesful result
         if 'result' in sResponse:
@@ -365,7 +365,7 @@ class SmartCamera_SonyQX():
         sFValue = str(fFvalue)
 
         # Send command to set Exposure Mode
-        sResponse = self.__sSimpleCall("setFNumber", params=[sFValue]))
+        sResponse = self.__sSimpleCall("setFNumber", params=[sFValue])
             
         # Check response for a succesful result
         if 'result' in sResponse:
@@ -394,7 +394,7 @@ class SmartCamera_SonyQX():
         sISO = str(u16ISO)
         
         # Send command to set Exposure Mode
-        sResponse = self.__sSimpleCall("setIsoSpeedRate", params=[sISO]))
+        sResponse = self.__sSimpleCall("setIsoSpeedRate", params=[sISO])
             
         # Check response for a succesful result
         if 'result' in sResponse:
