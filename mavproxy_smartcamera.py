@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #***************************************************************************
-#                      Copyright Droidika S.A. de C.V
+#                      Copyright Jaime Machuca
 #***************************************************************************
 # Title        : mavproxy_smartcamera.py
 #
@@ -152,6 +152,17 @@ class SmartCameraModule(mp_module.MPModule):
         if mtype == "CAMERA_FEEDBACK":
             print ("Got Message camera_feedback triggering Cameras")
             self.__vCmdCamTrigger(m)
+        if mtype == "COMMAND_LONG":
+            print ("Recieved Command Long")
+            COMMAND_LONG = m
+            print COMMAND_LONG.command
+            print COMMAND_LONG.param1
+            print COMMAND_LONG.param2
+            print COMMAND_LONG.param3
+            print COMMAND_LONG.param4
+            print COMMAND_LONG.param5
+            print COMMAND_LONG.param6
+            print COMMAND_LONG.param7
 
 #****************************************************************************
 #   Method Name     : init
